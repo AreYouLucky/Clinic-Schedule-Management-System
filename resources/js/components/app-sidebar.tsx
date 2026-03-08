@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, CalendarCog, CalendarRange,ClipboardMinus } from 'lucide-react';
+import { BookOpen,CalendarCog, ClipboardMinus } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -13,11 +13,7 @@ import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Bookings',
-        href: '/view-bookings',
-        icon: CalendarRange,
-    },
+
     {
         title: 'Schedules',
         href: '/view-schedules',

@@ -18,4 +18,9 @@ class Booking extends Model
         'additional_info',
         'status'
     ];
+
+    public function schedule()
+    {
+        return $this->belongsTo(DailySchedule::class, 'schedule_code', 'schedule_code');
+    }
 }

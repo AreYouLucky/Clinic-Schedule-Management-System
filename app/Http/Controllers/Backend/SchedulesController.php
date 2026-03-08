@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingCancellationRegret;
 
 class SchedulesController extends Controller
 {
@@ -140,11 +142,12 @@ class SchedulesController extends Controller
                     ->first();
 
                 if ($scheduleFound->is_available !== 1 && $schedule['status'] == false) {
-                    $bookings = Booking::where('schedule_code', $schedule->schedule_code)->get();
-                    //Send Email Here
+                    $booking = Booking::where('schedule_code', $schedule->schedule_code)->where('status', 0)->first();
+
+                    Mail::to($booking->email)->send(new BookingCancellationRegret($booking, $scheduleFound));
                 }
 
-                $schedule->update([
+                $scheduleFound->update([
                     'status' => $schedule['status'],
                 ]);
             }

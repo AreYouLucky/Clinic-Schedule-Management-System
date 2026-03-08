@@ -1,5 +1,6 @@
 
 export interface Booking {
+  id: number;
   fname: string;
   lname: string;
   mname?: string | null;
@@ -7,8 +8,14 @@ export interface Booking {
   schedule_code: string;
   booking_reason?: string | null;
   additional_info?: string | null;
-
-  status: string;
+  created_at?: string;
+  updated_at?: string;
+  month_code?: string;
+  date?: string;
+  start_time?: string;
+  end_time?: string;
+  is_available?: number | boolean;
+  status: number | boolean;
 }
 
 export interface DailySchedule {

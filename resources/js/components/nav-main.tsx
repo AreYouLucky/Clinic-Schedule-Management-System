@@ -6,7 +6,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { LayoutDashboardIcon } from 'lucide-react';
+import { CalendarRange } from 'lucide-react';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { NavItem } from '@/types';
 
@@ -17,19 +17,19 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
         <SidebarGroup className="px-2 py-0">
             <SidebarMenuItem>
                 <SidebarMenuButton
-                className='mb-4'
+                className='mb-4 '
                     asChild
-                    isActive={ isCurrentUrl('/dashboard')}
-                    tooltip={{children: 'Dashboard'}}
+                    isActive={ isCurrentUrl('/view-appointments')}
+                    tooltip={{children: 'Appointments'}}
                 >
-                    <Link href={'/dashboard'} prefetch>
-                       <LayoutDashboardIcon />
-                        <span>Dashboard</span>
+                    <Link href={'/view-appointments'} prefetch>
+                       <CalendarRange />
+                        <span>Appointment</span>
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarGroupLabel>Management</SidebarGroupLabel>
-            <SidebarMenu className='gap-1'>
+            <SidebarMenu className='gap-1 '>
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton

@@ -120,102 +120,104 @@ function UpdateScheduleForm() {
   }
 
   return (
-    <div className="space-y-6 p-2 md:p-4 lg:p-6">
-      <div>
-        <h1 className='text-xl font-bold text-sky-500'>
-          Update Schedule
-        </h1>
-        <p className='text-sm text-slate-500'>
-          Manage available time slots and schedule status.
-        </p>
-      </div>
-
-      <div className="flex lg:flex-row flex-col gap-6">
-
-        {/* Calendar */}
-        <div className='border h-fit rounded-2xl overflow-hidden'>
-          <DayPicker
-            mode="single"
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            disabled={[
-              { dayOfWeek: disabledWeekDays ?? [] }
-            ]}
-            month={
-              item.schedules.length
-                ? new Date(item.schedules[0].date)
-                : undefined
-            }
-            classNames={{
-              month: "bg-white p-4 rounded-2xl shadow-md",
-              caption: "flex justify-between items-center mb-4",
-              caption_label: "font-semibold text-lg text-gray-800",
-              nav: "hidden",
-              table: "w-full border-collapse",
-              head_cell: "text-gray-400 text-sm font-medium",
-              cell: "text-center p-1",
-              day: "h-10 w-10  hover:bg-blue-100   rounded-full transition",
-              selected: `bg-sky-500 text-white rounded-full`,
-              day_disabled: "text-gray-200 line-through",
-            }}
-          />
+    <section className='w-full p-4'>
+      <div className="space-y-6 p-2 md:p-4 lg:p-6 bg-white rounded-2xl">
+        <div>
+          <h1 className='text-2xl font-bold text-sky-500'>
+            Update Schedule
+          </h1>
+          <p className='text-sm text-slate-500'>
+            Manage available time slots and schedule status.
+          </p>
         </div>
 
-        {/* Schedule Grid */}
-        <div className="flex-1">
+        <div className="flex lg:flex-row flex-col gap-6">
 
-          {daySchedules.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Select a date to manage schedules.
-            </p>
-          ) : (
-            <>
-              {/* Toggle All */}
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-sm font-medium">
-                  Open on selected date?
-                </span>
-                <input
-                  type="checkbox"
-                  checked={isAllChecked}
-                  onChange={(e) => toggleAllForDate(e.target.checked)}
-                />
-              </div>
+          {/* Calendar */}
+          <div className='border h-fit rounded-2xl overflow-hidden'>
+            <DayPicker
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              disabled={[
+                { dayOfWeek: disabledWeekDays ?? [] }
+              ]}
+              month={
+                item.schedules.length
+                  ? new Date(item.schedules[0].date)
+                  : undefined
+              }
+              classNames={{
+                month: "bg-white p-4 rounded-2xl shadow-md",
+                caption: "flex justify-between items-center mb-4",
+                caption_label: "font-semibold text-lg text-gray-800",
+                nav: "hidden",
+                table: "w-full border-collapse",
+                head_cell: "text-gray-400 text-sm font-medium",
+                cell: "text-center p-1",
+                day: "h-10 w-10  hover:bg-blue-100   rounded-full transition",
+                selected: `bg-sky-500 text-white rounded-full`,
+                day_disabled: "text-gray-200 line-through",
+              }}
+            />
+          </div>
 
-              {/* Slots */}
-              <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
-                {daySchedules.map((slot) => (
-                  <label
-                    key={slot.id}
-                    className="border rounded-lg p-3 flex items-center justify-between"
-                  >
-                    <span>
-                      {slot.start} - {slot.end}
-                    </span>
+          {/* Schedule Grid */}
+          <div className="flex-1">
 
-                    <input
-                      type="checkbox"
-                      checked={slot.status}
-                      onChange={() => toggleSlot(slot.id)}
-                    />
-                  </label>
-                ))}
-              </div>
-            </>
-          )}
+            {daySchedules.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Select a date to manage schedules.
+              </p>
+            ) : (
+              <>
+                {/* Toggle All */}
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-medium">
+                    Open on selected date?
+                  </span>
+                  <input
+                    type="checkbox"
+                    checked={isAllChecked}
+                    onChange={(e) => toggleAllForDate(e.target.checked)}
+                  />
+                </div>
 
+                {/* Slots */}
+                <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
+                  {daySchedules.map((slot) => (
+                    <label
+                      key={slot.id}
+                      className="border rounded-lg p-3 flex items-center justify-between"
+                    >
+                      <span>
+                        {slot.start} - {slot.end}
+                      </span>
+
+                      <input
+                        type="checkbox"
+                        checked={slot.status}
+                        onChange={() => toggleSlot(slot.id)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </>
+            )}
+
+          </div>
         </div>
+
+        <Button
+          onClick={updateScheduleFn}
+          disabled={updateSchedule.isPending}
+          className="bg-sky-500 mt-4"
+        > {updateSchedule.isPending ? <Spinner className="mr-2 h-4 w-4 animate-spin" /> : <FaSave className="mr-2 h-4 w-4" />}
+          Save Changes
+        </Button>
+
       </div>
-
-      <Button
-        onClick={updateScheduleFn}
-        disabled={updateSchedule.isPending}
-        className="bg-sky-500 mt-4"
-      > {updateSchedule.isPending ?  <Spinner className="mr-2 h-4 w-4 animate-spin" /> : <FaSave className="mr-2 h-4 w-4" />}
-        Save Changes
-      </Button>
-
-    </div>
+    </section>
   )
 }
 

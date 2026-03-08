@@ -3,23 +3,25 @@ import { ReactNode } from "react";
 import { TextEffect } from "@/components/custom/animated-text";
 import AppLogo from "@/components/app-logo";
 import { TiBookmark } from "react-icons/ti";
+import { MdBookmarkAdded } from "react-icons/md";
+import { Toaster } from "sonner";
 export default function HomeLayout({ children }: { children: ReactNode }) {
     const words = [" Fast & Easy", "Patient-Friendly", "On-Time Service", "Book Anytime", "Hassle-Free",]
     return (
         <div className="min-h-screen bg-linear-to-br from-sky-50 to-blue-100 flex flex-col scroll-smooth">
+            <Toaster />
             <header className="flex justify-between items-center md:px-8 px-4 py-4 bg-white shadow-sm">
-                <h1 className="text-2xl font-bold text-sky-600">
-                    <AppLogo className="w-40"></AppLogo>
+                <h1 className="text-2xl font-bold text-sky-600 flex items-center">
+                    <AppLogo className="w-30"></AppLogo>
+
                 </h1>
-                <Link
-                    href="/book"
+                <a
+                    href="#BookNow"
                     className="bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition shadow-md flex items-center gap-2 flex-row"
                 >
                     <TiBookmark /> Book Now
-                </Link>
+                </a>
             </header>
-
-            {/* Hero Section */}
             <main className="flex flex-1 items-center justify-center px-4 sm:px-6">
                 <div className="max-w-4xl text-center w-full min-h-[60vh] flex flex-col justify-center">
 
@@ -28,13 +30,13 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                             <TextEffect
                                 words={words}
                                 className="inline-block "
-                                textClassName="font-bold md:text-5xl text-3xl"
+                                textClassName="font-bold md:text-5xl text-4xl"
                                 effect={"flip"}
                                 duration={5000}
                             />
                         </span>
 
-                        <span className="block text-sky-600">
+                        <span className="block text-sky-600 mb-1">
                             Clinic Appointment
                         </span>
                     </h2>
@@ -46,12 +48,12 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                     </p>
 
                     <div className="mt-6 sm:mt-8 flex justify-center">
-                        <Link
-                            href="/book"
-                            className="bg-sky-600 text-white px-6 sm:px-8 py-3 rounded-xl text-base sm:text-lg font-medium hover:bg-sky-700 transition shadow-md w-full sm:w-auto"
+                        <a
+                            href="#BookNow"
+                            className="flex items-center gap-2 bg-sky-600 text-white px-6 sm:px-8 py-3 rounded-xl text-base sm:text-lg font-medium hover:bg-sky-700 transition shadow-md w-full sm:w-auto"
                         >
-                            Book an Appointment
-                        </Link>
+                            <MdBookmarkAdded /> Book an Appointment
+                        </a>
                     </div>
 
                 </div>
@@ -83,15 +85,9 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                     </div>
                 </div>
             </section>
-            <section>
+            <section className="flex w-full justify-center items-center p-2 md:px-10">
                 {children}
             </section>
-
-            {/* Footer */}
-            <footer className="text-center py-4 bg-gray-100 text-gray-500 text-sm">
-                © {new Date().getFullYear()} HealthCare Clinic. All rights reserved.
-            </footer>
-
         </div>
     );
 }

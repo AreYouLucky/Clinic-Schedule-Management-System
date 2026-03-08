@@ -21,7 +21,7 @@ function AuthPage() {
         setLoading(true);
         axios.post('/request-login', item).then((res) => {
             toast.success(res.data.status);
-            window.location.href = "/dashboard"
+            window.location.href = "/view-appointments"
             setLoading(false);
         }).catch((err) => {
             if (err.response?.data?.errors) {
