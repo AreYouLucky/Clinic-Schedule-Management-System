@@ -11,9 +11,9 @@ type ApprovedDialogProp = {
     message?: string;
 };
 
-function ApprovedDialog({ code, show, onClose, onConfirm, message }: ApprovedDialogProp) {
+function ApprovedDialog({ code, show, onConfirm, message }: ApprovedDialogProp) {
     return (
-        <Dialog open={show} onOpenChange={onClose}>
+        <Dialog open={show} onOpenChange={ () => { }}>
             <DialogContent className="max-w-sm p-0 overflow-hidden rounded-2xl shadow-xl">
                 <DialogHeader className='hidden'>
                     <DialogTitle >

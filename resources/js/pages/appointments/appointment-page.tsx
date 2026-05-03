@@ -12,6 +12,7 @@ import ConfirmationDialog from '@/components/custom/confirmation-dialog';
 import AppointmentHeader from './partials/header';
 import DataSection from './partials/data-section';
 import PaymentDialog from './partials/payment-dialog';
+import WalkinDialog from './partials/walkin-dialog';
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Appointments', href: '/view-appointments' },
 ];
@@ -91,22 +92,22 @@ function AppointmentsPage() {
     };
 
     return (
-        <div className='w-full space-y-5 bg-linear-to-b from-sky-50 via-white to-white p-4 lg:p-6'>
+        <div className='w-full space-y-5 p-4 lg:p-6'>
             <AppointmentHeader no_schedules={schedules.length} total_paid={totalCollected} />
             <DataSection pendingCount={pendingCount} attendedCount={attendedCount} paidCount={paidCount} selectedDate={selectedDate} convertShortDate={convertShortDate} />
 
 
             <section className='rounded-lg border border-sky-200 bg-white p-5  lg:p-6'>
-                <div className='flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between'>
+                <div className='flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between'>
                     <div>
                         <Button
-                            type='button'
+                            type="button"
                             onClick={() => setShowWalkInModal(true)}
-                            className='rounded-lg border border-white/20 bg-white/12 p-4 text-left text-white shadow-none backdrop-blur-sm hover:bg-white/20 sm:col-span-2'
+                            className="flex flex-col items-start rounded-xl bg-sky-600 px-5 py-6 text-white shadow-sm transition hover:bg-sky-700"
                         >
-                            <span className='block text-xs uppercase tracking-[0.18em] text-sky-50/80'>Quick Action</span>
-                            <span className='mt-3 block text-lg font-semibold'>Add Walk-In</span>
-                            <span className='mt-1 block text-sm text-sky-50/85'>Create a same-day slot and appointment from the desk.</span>
+                            <span className="text-lg font-semibold leading-tight">
+                                Add Walk-In Appointment
+                            </span>
                         </Button>
                     </div>
                     <div className='flex flex-wrap items-end gap-3'>
@@ -286,6 +287,11 @@ function AppointmentsPage() {
                 setPaidAmount={setPaidAmount}
                 confirmPayment={confirmPayment}
                 updateStatus={updateStatus}
+            />
+            <WalkinDialog
+                show={showWalkInModal}
+                onClose={() => setShowWalkInModal(false)}
+                refetchBookings={() => refetch()}
             />
 
         </div>

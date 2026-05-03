@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('fname');
             $table->string('lname');
             $table->string('mname')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
+            $table->string('contact')->nullable();
             $table->string('schedule_code');
             $table->foreign('schedule_code')
                 ->references('schedule_code')

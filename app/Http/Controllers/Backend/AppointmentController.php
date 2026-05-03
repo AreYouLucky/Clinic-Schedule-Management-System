@@ -35,6 +35,7 @@ class AppointmentController extends Controller
                 'bookings.lname',
                 'bookings.mname',
                 'bookings.email',
+                'bookings.contact',
                 'bookings.schedule_code',
                 'bookings.status',
                 'bookings.paid_amount',
@@ -129,18 +130,6 @@ class AppointmentController extends Controller
 
         $today = Carbon::today();
         $monthCode = $today->month . '-' . $today->year;
-
-        $hasConflict = DailySchedule::query()
-            ->whereDate('date', $today->toDateString())
-            ->whereTime('start_time', '<', $validated['end_time'])
-            ->whereTime('end_time', '>', $validated['start_time'])
-            ->exists();
-
-        if ($hasConflict) {
-            return response()->json([
-                'message' => 'The selected walk-in time overlaps with an existing schedule.',
-            ], 422);
-        }
 
         $result = DB::transaction(function () use ($validated, $today, $monthCode) {
             MonthlySchedule::firstOrCreate(

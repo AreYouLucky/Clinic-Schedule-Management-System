@@ -13,6 +13,8 @@ import InputError from "@/components/input-error"
 import ConfirmationDialog from "@/components/custom/confirmation-dialog"
 import ApprovedDialog from "./partials.tsx/approved-dialog"
 import { Spinner } from "@/components/ui/spinner"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { CalendarDays, Clock3 } from "lucide-react"
 
 type DateItem = {
   date: string
@@ -35,6 +37,7 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>()
   const [schedules, setSchedules] = useState<DailySchedule[]>([])
   const [loading, setLoading] = useState(false)
+  const [showScheduleModal, setShowScheduleModal] = useState(false)
 
   const allowedSet = useMemo(() => {
     return new Set(
@@ -53,6 +56,7 @@ export default function Home() {
       const formattedDate = `${year}-${month}-${day}`
       axios.get(`/get-schedules/${formattedDate}`).then((res) => {
         setSchedules(res.data)
+        setShowScheduleModal(true)
       })
     }
   }, [selectedDate])
@@ -66,6 +70,17 @@ export default function Home() {
 
     return () => clearInterval(timer)
   }, [cooldown])
+
+  const formattedSelectedDate = selectedDate
+    ? `${selectedDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })}`
+    : ""
+
+  const selectedSchedule = schedules.find((slot) => slot.schedule_code === item.scheduleCode)
 
   const confirmAppointment = () => {
     setConfirmation(false)
@@ -101,14 +116,15 @@ export default function Home() {
   const downloadAppointment = () => {
     
     window.open(`/download-appointment/${data?.booking.schedule_code}`, "_blank");
+    setDialog(false)
   }
 
   return (
     <HomeLayout>
-      <div className="max-w-7xl w-full mx-auto px-6 lg:px-12 py-12 bg-white  rounded-2xl p-8 my-6" id="BookNow">
-        <div className="lg:mb-6 mb-6">
+      <div className="max-w-7xl w-full mx-auto px-6 lg:px-12 md:py-12 py-6 bg-white  rounded-2xl p-8 my-6" id="BookNow">
+        <div className="lg:mb-6 mb-6 hidden md:flex items-center justify-center gap-6">
           <div className="flex justify-center">
-            <div className="flex items-center  max-w-3xl  justify-between">
+            <div className="flex items-center  max-w-3xl justify-between">
               {["Schedule", "Information", "Email Verification"].map((label, index) => {
                 const stepNumber = index + 1
                 const isActive = step === stepNumber
@@ -136,7 +152,7 @@ export default function Home() {
         <div className="">
           {step === 1 && (
             <div className="space-y-4 py-4">
-              <div className="flex lg:flex-row flex-col  justify-center gap-6">
+              <div className="flex flex-col  justify-center gap-6">
                 <div className="flex items-center flex-col">
                   <p className="text-gray-500 mb-4">
                     Choose your preferred date and time.
@@ -144,7 +160,22 @@ export default function Home() {
                   <DayPicker
                     mode="single"
                     selected={selectedDate}
-                    onSelect={setSelectedDate}
+                    onSelect={(date) => {
+                      if (!date) {
+                        return
+                      }
+
+                      setSelectedDate(date)
+                      setItem((prev) => ({ ...prev, scheduleCode: "" }))
+                    }}
+                    onDayClick={(date) => {
+                      if (
+                        selectedDate &&
+                        date.toDateString() === selectedDate.toDateString()
+                      ) {
+                        setShowScheduleModal(true)
+                      }
+                    }}
                     fromDate={new Date()}
                     disabled={(date) =>
                       !allowedSet.has(date.toDateString())
@@ -152,38 +183,30 @@ export default function Home() {
                     className="p-4 border rounded-xl shadow-sm w-fit"
                   />
                 </div>
-                {selectedDate && schedules.length > 0 && (
-                  <div className="flex-1 h-full ">
-                    <p className="mb-4">Select a time slot</p>
-                    <div className="grid md:grid-cols-3 gap-4">
-
-                      {schedules.map((slot, index) => (
-                        <label
-                          key={index}
-                          className={`
-                    border rounded-lg p-4 cursor-pointer transition flex items-center justify-center flex-row
-                    ${item.scheduleCode === slot.schedule_code
-                              ? "bg-sky-600 text-white border-sky-600"
-                              : "hover:bg-sky-50"
-                            }
-                  `}
-                        >
-                          {slot.start_time} - {slot.end_time}
-                          <input
-                            type="radio"
-                            className="hidden"
-                            checked={item.scheduleCode === slot.schedule_code}
-                            onChange={() =>
-                              setItem({ ...item, scheduleCode: slot.schedule_code })
-                            }
-                          />
-                        </label>
-                      ))}
+                <div className="flex-1 h-full">
+                  <div className="rounded-2xl border border-sky-100 bg-sky-50/60 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-xl bg-white p-2.5 text-sky-600 shadow-sm">
+                        <CalendarDays size={18} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-slate-900">
+                          {selectedDate ? formattedSelectedDate : "Choose a date to view slots"}
+                        </h3>
+                        {selectedSchedule && (
+                          <p className="mt-1 text-xs font-medium text-sky-700">
+                            Time: {selectedSchedule.start_time} - {selectedSchedule.end_time}
+                          </p>
+                        )}
+                      </div>
                     </div>
-
+                    {selectedDate && schedules.length === 0 && (
+                      <p className="mt-3 text-sm text-rose-600">
+                        No available time slots for the selected date.
+                      </p>
+                    )}
                   </div>
-                )}
-
+                </div>
               </div>
 
               <div className="flex justify-end">
@@ -277,7 +300,7 @@ export default function Home() {
               <Input
                 type="text"
                 name="contact"
-                placeholder="Contact No."
+                placeholder="Contact No. (required if no email)"
                 value={item.contact ?? ""}
                 onChange={handleChange}
                 maxLength={11}
@@ -300,6 +323,42 @@ export default function Home() {
             </div>
           )}
         </div>
+        <Dialog open={showScheduleModal} onOpenChange={setShowScheduleModal}>
+          <DialogContent className="sm:max-w-3xl max-h-[98vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle className="text-sky-700">Select a Time Slot</DialogTitle>
+              <DialogDescription className="text-slate-600">
+                {selectedDate
+                  ? `Available appointment times for ${formattedSelectedDate}.`
+                  : "Choose a date first to view available appointment times."}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 md:grid-cols-3 max-h-[80vh] overflow-y-auto py-2">
+              {schedules.map((slot, index) => (
+                <label
+                  key={index}
+                  className={`
+                    border rounded-xl p-4 cursor-pointer transition flex items-center justify-center flex-row text-center text-sm
+                    ${item.scheduleCode === slot.schedule_code
+                      ? "bg-sky-600 text-white border-sky-600 shadow-md"
+                      : "bg-white hover:bg-sky-200 border-sky-200 text-slate-700"}
+                  `}
+                >
+                  {slot.start_time} - {slot.end_time}
+                  <input
+                    type="radio"
+                    className="hidden"
+                    checked={item.scheduleCode === slot.schedule_code}
+                    onChange={() => {
+                      setItem({ ...item, scheduleCode: slot.schedule_code })
+                      setShowScheduleModal(false)
+                    }}
+                  />
+                </label>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
         <ApprovedDialog show={dialog} onClose={() => setDialog(false)} code={data?.booking.schedule_code ?? ""} onConfirm={downloadAppointment} />
         <ConfirmationDialog show={confirmation} onConfirm={confirmAppointment} onClose={() => setConfirmation(false)} type={2} message="Are you sure you want to create an appointment?" />
       </div>

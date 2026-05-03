@@ -8,22 +8,22 @@ import { Toaster } from "sonner";
 export default function HomeLayout({ children }: { children: ReactNode }) {
     const words = [" Fast & Easy", "Patient-Friendly", "On-Time Service", "Book Anytime", "Hassle-Free",]
     return (
-        <div className="min-h-screen bg-linear-to-br from-sky-50 to-blue-100 flex flex-col scroll-smooth">
+        <div className="min-h-screen bg-white flex flex-col scroll-smooth">
             <Toaster />
-            <header className="flex justify-between items-center md:px-8 px-4 py-4 bg-white shadow-sm">
+            <header className="flex justify-between items-center md:px-8 px-4 py-4 bg-white shadow-sm border-b">
                 <h1 className="text-2xl font-bold text-sky-600 flex items-center">
                     <AppLogo className="w-30"></AppLogo>
 
                 </h1>
                 <a
                     href="#BookNow"
-                    className="bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition shadow-md flex items-center gap-2 flex-row"
+                    className="bg-sky-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition shadow-md flex items-center gap-2 flex-row"
                 >
                     <TiBookmark /> Book Now
                 </a>
             </header>
-            <main className="flex flex-1 items-center justify-center px-4 sm:px-6">
-                <div className="max-w-4xl text-center w-full min-h-[60vh] flex flex-col justify-center">
+            <main className="flex flex-1 items-center justify-center px-4 sm:px-6 md:bg-white bg-sky-50">
+                <div className="max-w-4xl text-center w-full lg:min-h-[60vh] min-h-[50vh] flex flex-col justify-center">
 
                     <h2 className="text-4xl sm:text-4xl md:text-5xl font-bold text-gray-800 leading-tight flex items-center justify-center gap-1 flex-col md:flex-row">
                         <span className="block">
@@ -50,7 +50,7 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                     <div className="mt-6 sm:mt-8 flex justify-center">
                         <a
                             href="#BookNow"
-                            className="flex items-center gap-2 bg-sky-600 text-white px-6 sm:px-8 py-3 rounded-xl text-base sm:text-lg font-medium hover:bg-sky-700 transition shadow-md w-full sm:w-auto"
+                            className="flex items-center gap-2 bg-sky-600 text-white px-6 sm:px-8 py-3 rounded-xl text-base sm:text-lg font-medium hover:bg-sky-700 transition shadow-md  "
                         >
                             <MdBookmarkAdded /> Book an Appointment
                         </a>
@@ -60,32 +60,32 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
             </main>
 
             {/* Info Section */}
-            <section className="bg-white py-12 px-6">
+            <section className="bg-sky-700 py-12 px-6 hidden md:block">
                 <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 text-center">
 
                     <div>
-                        <h3 className="text-xl font-semibold text-sky-600">Easy Scheduling</h3>
-                        <p className="mt-3 text-gray-600">
+                        <h3 className="text-xl font-semibold text-sky-200">Easy Scheduling</h3>
+                        <p className="mt-3 text-gray-50">
                             Select your preferred date and time instantly.
                         </p>
                     </div>
 
                     <div>
-                        <h3 className="text-xl font-semibold text-sky-600">Quick Confirmation</h3>
-                        <p className="mt-3 text-gray-600">
+                        <h3 className="text-xl font-semibold text-sky-200">Quick Confirmation</h3>
+                        <p className="mt-3 text-gray-50">
                             Get immediate confirmation of your appointment.
                         </p>
                     </div>
 
                     <div>
-                        <h3 className="text-xl font-semibold text-sky-600">Trusted Care</h3>
-                        <p className="mt-3 text-gray-600">
+                        <h3 className="text-xl font-semibold text-sky-200">Trusted Care</h3>
+                        <p className="mt-3 text-gray-50">
                             Professional healthcare service you can rely on.
                         </p>
                     </div>
                 </div>
             </section>
-            <section className="flex w-full justify-center items-center p-2 md:px-10">
+            <section className="flex w-full justify-center items-center p-2 md:px-10 border-t">
                 {children}
             </section>
         </div>
