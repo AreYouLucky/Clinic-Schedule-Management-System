@@ -3,7 +3,7 @@ import { DailySchedule, ScheduleSlotUpdate } from '@/types/models'
 import { usePage } from '@inertiajs/react'
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { formatDate } from './utils';
+import { formatDate, formatLocalDate, parseDateString } from './utils';
 import { useHandleChange } from '@/hooks/use-handle-change';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -54,20 +54,18 @@ function UpdateScheduleForm() {
 
   useEffect(() => {
     if (formattedSchedules.length > 0) {
-      setSelectedDate(new Date(formattedSchedules[0].date))
+      setSelectedDate(parseDateString(formattedSchedules[0].date))
     }
   }, [formattedSchedules])
 
   const daySchedules = useMemo(() => {
     if (!selectedDate) return []
 
-    const formatted = selectedDate.toLocaleDateString("en-CA")
+    const formatted = formatLocalDate(selectedDate)
 
     return item.schedules.filter(s => s.date === formatted)
 
   }, [item.schedules, selectedDate])
-
-  console.log(daySchedules)
 
   const toggleSlot = (slotId: number) => {
     setItem(prev => ({
@@ -144,7 +142,7 @@ function UpdateScheduleForm() {
               ]}
               month={
                 item.schedules.length
-                  ? new Date(item.schedules[0].date)
+                  ? parseDateString(item.schedules[0].date)
                   : undefined
               }
               classNames={{

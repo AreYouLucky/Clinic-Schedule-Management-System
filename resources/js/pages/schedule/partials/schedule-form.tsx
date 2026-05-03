@@ -110,7 +110,7 @@ function ScheduleForm() {
             <div className="w-full bg-white rounded-lg border border-gray-200 shadow-sm lg:p-10 md:p-6 p-4 space-y-4">
                 <div className="flex gap-1 justify-between flex-row mb-5">
                     <div>
-                        <h1 className='text-xl font-bold text-sky-500'>
+                        <h1 className='text-xl font-bold text-sky-700'>
                             Schedule Form
                         </h1>
                         <p className='text-sm text-slate-500'>

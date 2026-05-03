@@ -35,6 +35,7 @@
         }
         .status-pending { color: #b45309; font-weight: 600; }
         .status-attended { color: #15803d; font-weight: 600; }
+        .status-paid { color: #0f766e; font-weight: 600; }
         .status-cancelled { color: #be123c; font-weight: 600; }
         @media print {
             @page { margin: 12mm; }
@@ -65,6 +66,7 @@
                 <th>Time</th>
                 <th>Reason</th>
                 <th>Status</th>
+                <th>Paid Amount</th>
                 <th>Schedule Code</th>
             </tr>
         </thead>
@@ -72,8 +74,8 @@
             @forelse ($rows as $row)
                 @php
                     $statusCode = (int) $row->status;
-                    $statusText = $statusCode === 2 ? 'Cancelled' : ($statusCode === 1 ? 'Attended' : 'Pending');
-                    $statusClass = $statusCode === 2 ? 'status-cancelled' : ($statusCode === 1 ? 'status-attended' : 'status-pending');
+                    $statusText = $statusCode === 2 ? 'Cancelled' : ($statusCode === 3 ? 'Paid' : ($statusCode === 1 ? 'Attended' : 'Pending'));
+                    $statusClass = $statusCode === 2 ? 'status-cancelled' : ($statusCode === 3 ? 'status-paid' : ($statusCode === 1 ? 'status-attended' : 'status-pending'));
                 @endphp
                 <tr>
                     <td>{{ trim($row->lname . ', ' . $row->fname . ' ' . ($row->mname ?? '')) }}</td>
@@ -82,15 +84,15 @@
                     <td>{{ $row->start_time }} - {{ $row->end_time }}</td>
                     <td>{{ $row->booking_reason ?? '-' }}</td>
                     <td class="{{ $statusClass }}">{{ $statusText }}</td>
+                    <td>{{ $row->paid_amount !== null ? number_format((float) $row->paid_amount, 2) : '-' }}</td>
                     <td>{{ $row->schedule_code }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">No data found for selected range.</td>
+                    <td colspan="8">No data found for selected range.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 </body>
 </html>
-

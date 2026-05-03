@@ -1,4 +1,5 @@
 import { ScheduleFormType, ScheduleSlot } from "@/types/models";
+
 export const timeToMinutes = (time: string) => {
     const [h, m] = time.split(":").map(Number);
     return h * 60 + m;
@@ -12,9 +13,23 @@ export const minutesToTime = (mins: number) => {
     return `${h}:${m}`;
 };
 
+export const formatLocalDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
+
+export const parseDateString = (value: string) => {
+    const [year, month, day] = value.split("-").map(Number);
+    return new Date(year, month - 1, day);
+};
+
 export const formatDate = (year: number, month: number, day: number) => {
-    const d = new Date(year, month - 1, day);
-    return d.toISOString().split("T")[0];
+    const normalizedMonth = String(month).padStart(2, "0");
+    const normalizedDay = String(day).padStart(2, "0");
+    return `${year}-${normalizedMonth}-${normalizedDay}`;
 };
 
 export const canGenerateSchedule = (item: ScheduleFormType) => {
@@ -120,7 +135,7 @@ export const filterSchedulesByDate = (
 ) => {
     if (!selected) return [];
 
-    const dateStr = selected.toISOString().split("T")[0];
+    const dateStr = formatLocalDate(selected);
 
     return schedules.filter((s) => s.date === dateStr);
 };

@@ -48,7 +48,7 @@ const DataTable = memo(function DataTable({
     <div className="relative my-2 rounded-lg ">
       <div className="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-600 rounded-lg">
-          <thead className="text-xs text-gray-50 uppercase bg-sky-500">
+          <thead className="text-xs text-gray-50 uppercase bg-sky-700">
             <tr>
               {headers.map((header, index) => (
                 <th
@@ -169,7 +169,7 @@ function PaginatedSearchTableInner<T = unknown>({
               className="min-w-62.5 h-10 border-gray-300 shadow-none ps-8"
             />
 
-            <Search className="absolute left-2.5 text-gray-500" size={16} />
+            <Search className="absolute left-2.5 text-gray-700" size={16} />
 
           </div>
 
@@ -177,7 +177,7 @@ function PaginatedSearchTableInner<T = unknown>({
             <div>
               <Button
                 onClick={onRefresh}
-                className="px-4 bg-sky-500 h-full text-gray-50 poppins-semibold"
+                className="px-4 bg-sky-700 h-full text-gray-50 poppins-semibold"
                 type="button"
                 disabled={isLoading}
               >
@@ -196,7 +196,7 @@ function PaginatedSearchTableInner<T = unknown>({
           <tr>
             <td colSpan={headers.length} className="text-center py-6">
               <div className="flex justify-center items-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-sky-500 border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-sky-700 border-t-transparent"></div>
                 <span className="ml-3 text-gray-600">Loading...</span>
               </div>
             </td>

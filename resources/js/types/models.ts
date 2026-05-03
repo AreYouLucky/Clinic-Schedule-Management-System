@@ -5,9 +5,11 @@ export interface Booking {
   lname: string;
   mname?: string | null;
   email: string;
+  contact: string;
   schedule_code: string;
   booking_reason?: string | null;
   additional_info?: string | null;
+  paid_amount?: string | number | null;
   created_at?: string;
   updated_at?: string;
   month_code?: string;

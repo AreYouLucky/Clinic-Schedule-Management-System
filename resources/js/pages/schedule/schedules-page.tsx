@@ -26,10 +26,10 @@ function SchedulesPage() {
       <section className='bg-white rounded-xl shadow-sm border border-slate-100 p-5 lg:p-6'>
         <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <h1 className='text-xl lg:text-2xl font-bold text-sky-500 mt-1'>Monthly Schedules</h1>
-            <p className='text-sm text-slate-500 mt-1'>Track month setup, available slots, and schedule status in one place.</p>
+            <h1 className='text-xl lg:text-2xl font-bold text-sky-700 mt-1'>Monthly Schedules</h1>
+            <p className='text-sm text-slate-700 mt-1'>Track month setup, available slots, and schedule status in one place.</p>
           </div>
-          <Link href="/schedules/create" className='bg-primary text-gray-50 px-4 py-2.5 rounded-lg font-semibold uppercase text-sm inline-flex gap-2 items-center justify-center w-full sm:w-auto' >
+          <Link href="/schedules/create" className='bg-sky-700 text-gray-50 px-4 py-2.5 rounded-lg font-semibold uppercase text-sm inline-flex gap-2 items-center justify-center w-full sm:w-auto' >
             <PlusIcon className='w-4 h-4' />
             Create Schedule
           </Link>

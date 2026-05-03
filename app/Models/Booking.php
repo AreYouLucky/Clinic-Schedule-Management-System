@@ -15,9 +15,15 @@ class Booking extends Model
         'contact',
         'schedule_code',
         'status',
+        'paid_amount',
         'booking_reason',
         'additional_info',
-        'status'
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'integer',
+        'paid_amount' => 'decimal:2',
     ];
 
     public function schedule()

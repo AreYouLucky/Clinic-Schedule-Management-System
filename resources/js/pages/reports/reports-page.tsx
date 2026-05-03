@@ -31,8 +31,17 @@ function ReportsPage() {
         const total = reports.length;
         const pending = reports.filter((r) => Number(r.status) === 0).length;
         const attended = reports.filter((r) => Number(r.status) === 1).length;
+        const paid = reports.filter((r) => Number(r.status) === 3).length;
         const cancelled = reports.filter((r) => Number(r.status) === 2).length;
-        return { total, pending, attended, cancelled };
+        const paidAmountTotal = reports.reduce((sum, report) => {
+            const amount = report.paid_amount !== null && report.paid_amount !== undefined
+                ? Number(report.paid_amount)
+                : 0;
+
+            return sum + (Number.isFinite(amount) ? amount : 0);
+        }, 0);
+
+        return { total, pending, attended, paid, cancelled, paidAmountTotal };
     }, [reports]);
 
     const getExportQuery = () => {
@@ -107,7 +116,7 @@ function ReportsPage() {
                 </div>
             </section>
 
-            <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3'>
+            <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3'>
                 <div className='rounded-xl border border-slate-200 bg-white p-4'>
                     <p className='text-xs text-slate-500 uppercase'>Total Bookings</p>
                     <p className='text-2xl font-bold text-slate-800 mt-1'>{summary.total}</p>
@@ -119,6 +128,14 @@ function ReportsPage() {
                 <div className='rounded-xl border border-slate-200 bg-white p-4'>
                     <p className='text-xs text-emerald-700 uppercase'>Attended</p>
                     <p className='text-2xl font-bold text-emerald-700 mt-1'>{summary.attended}</p>
+                </div>
+                <div className='rounded-xl border border-slate-200 bg-white p-4'>
+                    <p className='text-xs text-cyan-700 uppercase'>Paid</p>
+                    <p className='text-2xl font-bold text-cyan-700 mt-1'>{summary.paid}</p>
+                </div>
+                <div className='rounded-xl border border-slate-200 bg-white p-4'>
+                    <p className='text-xs text-sky-700 uppercase'>Paid Amount</p>
+                    <p className='text-2xl font-bold text-sky-700 mt-1'>PHP {summary.paidAmountTotal.toFixed(2)}</p>
                 </div>
                 <div className='rounded-xl border border-slate-200 bg-white p-4'>
                     <p className='text-xs text-rose-700 uppercase'>Cancelled</p>
@@ -138,6 +155,7 @@ function ReportsPage() {
                         { name: 'Time', position: 'center' },
                         { name: 'Reason', position: 'left' },
                         { name: 'Status', position: 'center' },
+                        { name: 'Amount', position: 'center' },
                     ]}
                     searchBy={(item) => `${item.schedule_code} ${item.fname} ${item.lname} ${item.mname} ${item.email} ${item.booking_reason}`}
                     renderRow={(r) => (
@@ -152,11 +170,16 @@ function ReportsPage() {
                             <td className='text-center py-3'>
                                 {Number(r.status) === 2 ? (
                                     <span className='inline-flex items-center rounded-full bg-rose-100 text-rose-700 px-3 py-1 text-xs font-semibold'>Cancelled</span>
+                                ) : Number(r.status) === 3 ? (
+                                    <span className='inline-flex items-center rounded-full bg-cyan-100 text-cyan-700 px-3 py-1 text-xs font-semibold'>Paid</span>
                                 ) : Number(r.status) === 1 ? (
                                     <span className='inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-semibold'>Attended</span>
                                 ) : (
                                     <span className='inline-flex items-center rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold'>Pending</span>
                                 )}
+                            </td>
+                            <td className='text-center py-3 text-slate-700'>
+                                {r.paid_amount !== null && r.paid_amount !== undefined ? `PHP ${Number(r.paid_amount).toFixed(2)}` : '-'}
                             </td>
                         </tr>
                     )}

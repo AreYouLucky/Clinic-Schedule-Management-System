@@ -24,7 +24,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                 >
                     <Link href={'/view-appointments'} prefetch>
                        <CalendarRange />
-                        <span>Appointment</span>
+                        <span>Appointments</span>
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>

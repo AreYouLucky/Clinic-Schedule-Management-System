@@ -27,10 +27,15 @@ class ReportsController extends Controller
 
         return response()->streamDownload(function () use ($rows) {
             $output = fopen('php://output', 'w');
-            fputcsv($output, ['Patient', 'Email', 'Date', 'Start Time', 'End Time', 'Reason', 'Status', 'Schedule Code']);
+            fputcsv($output, ['Patient', 'Email', 'Date', 'Start Time', 'End Time', 'Reason', 'Status', 'Paid Amount', 'Schedule Code']);
 
             foreach ($rows as $row) {
-                $status = (int) $row->status === 2 ? 'Cancelled' : ((int) $row->status === 1 ? 'Attended' : 'Pending');
+                $status = match ((int) $row->status) {
+                    1 => 'Attended',
+                    2 => 'Cancelled',
+                    3 => 'Paid',
+                    default => 'Pending',
+                };
 
                 fputcsv($output, [
                     trim($row->lname . ', ' . $row->fname . ' ' . ($row->mname ?? '')),
@@ -40,6 +45,7 @@ class ReportsController extends Controller
                     $row->end_time,
                     $row->booking_reason,
                     $status,
+                    $row->paid_amount,
                     $row->schedule_code,
                 ]);
             }
@@ -76,6 +82,7 @@ class ReportsController extends Controller
                 'bookings.email',
                 'bookings.schedule_code',
                 'bookings.status',
+                'bookings.paid_amount',
                 'bookings.booking_reason',
                 'bookings.additional_info',
                 'bookings.created_at',
