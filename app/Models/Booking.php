@@ -12,6 +12,7 @@ class Booking extends Model
         'lname',
         'mname',
         'email',
+        'contact',
         'schedule_code',
         'status',
         'booking_reason',

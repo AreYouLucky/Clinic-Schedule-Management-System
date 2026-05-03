@@ -21,6 +21,15 @@ class SchedulesController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    function generateUniqueCode()
+    {
+        do {
+            $code = strtoupper(Str::random(6));
+        } while (DB::table('daily_schedules')->where('schedule_code', $code)->exists());
+
+        return $code;
+    }
     public function index()
     {
         return MonthlySchedule::where('is_active', 1)
@@ -75,7 +84,7 @@ class SchedulesController extends Controller
                     'end_time' => $schedule['end'],
                     'is_available' => 1,
                     'status' => $schedule['status'],
-                    'schedule_code' => Str::uuid()
+                    'schedule_code' => $this->generateUniqueCode()
                 ]);
             }
 

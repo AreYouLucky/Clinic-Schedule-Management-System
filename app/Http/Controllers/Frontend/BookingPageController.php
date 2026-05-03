@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DailySchedule;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Hash;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use App\Models\EmailVerification;
@@ -67,38 +67,28 @@ class BookingPageController extends Controller
         ]);
     }
 
-    public function verifyCode(Request $request)
+    public function submitAppointment(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'code' => 'required|string',
-            'fname' => 'required|string',
-            'lname' => 'required|string',
-            'mname' => 'nullable|string',
-            'schedule_code' => 'required|string',
-            'booking_reason' => 'nullable|string',
+            'email' => ['nullable', 'email'],
+            'contact' => ['required', 'regex:/^(09|\+639|639)\d{9}$/'],
+            'fname' => ['required', 'string'],
+            'lname' => ['required', 'string'],
+            'mname' => ['nullable', 'string'],
+            'schedule_code' => ['required', 'string'],
+            'booking_reason' => ['nullable', 'string'],
+        ], [
+            'contact.required' => 'Contact number is required.',
+            'contact.regex' => 'Invalid contact number.',
         ]);
-
-        $record = EmailVerification::where('email', $request->email)->first();
-
-        if (!$record) {
-            return response()->json(['message' => 'Invalid request'], 422);
-        }
-
-        if (now()->greaterThan($record->expires_at)) {
-            return response()->json(['message' => 'Code expired'], 422);
-        }
-
-        if (!Hash::check($request->code, $record->code)) {
-            return response()->json(['message' => 'Invalid code'], 422);
-        }
 
         $booking = Booking::create([
             'fname' => $request->fname,
             'lname' => $request->lname,
             'mname' => $request->mname,
-            'email' => $request->email,
-            'booking_reason' => $request->reason,
+            'email' => $request->email ?? "",
+            'contact' => $request->contact,
+            'booking_reason' => $request->reason ?? "",
             'schedule_code' => $request->schedule_code,
             'status' => 0
         ]);
@@ -107,12 +97,13 @@ class BookingPageController extends Controller
             'is_available' => 0
         ]);
 
-        Mail::to($booking->email)->send(
-            new BookingConfirmationMail($booking, $schedule)
-        );
-        $record->delete();
+        if ($request->filled('email')) {
 
-        return response()->json(['message' => 'Booking successful, check your email for more information.'], 200);
+            Mail::to($booking->email)->send(
+                new BookingConfirmationMail($booking, $schedule)
+            );
+        }
+        return response()->json(['message' => 'Booking successful, check your email for more information.', 'booking' => $booking, 'schedule' => $schedule], 200);
     }
 
     public function getSchedules(String $date)
@@ -132,5 +123,20 @@ class BookingPageController extends Controller
         $schedules = $query->orderBy('start_time', 'asc')->get();
 
         return response()->json($schedules);
+    }
+
+    public function downloadAppointment($id)
+    {
+        $booking = Booking::where('schedule_code', $id)->first();
+
+        $schedule = DailySchedule::where('schedule_code', $booking->schedule_code)
+            ->first();
+
+        $pdf = Pdf::loadView('emails.booking-approved', [
+            'booking' => $booking,
+            'schedule' => $schedule
+        ]);
+
+        return $pdf->setPaper([0, 0, 380, 400])->download('appointment.pdf');
     }
 }

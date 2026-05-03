@@ -1,106 +1,102 @@
 <!DOCTYPE html>
 <html>
 
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,sans-serif;">
+<body style="margin:0;padding:0;font-family:Arial, Helvetica, sans-serif;font-size:12px;color:#1f2937;">
 
-    <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center">
 
-                <table width="480" cellpadding="0" cellspacing="0"
-                    style="background:#ffffff;border-radius:12px;padding:40px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.05);">
+                <!-- Receipt Container -->
+                <table width="320" cellpadding="0" cellspacing="0" style="padding:15px;">
 
+                    <!-- Logo -->
                     <tr>
                         <td align="center">
-                            <img src="{{ $message->embed(public_path('/storage/logos/logo.png')) }}" alt="Clinic Logo"
-                                width="180" style="margin-bottom:10px;">
+                            <img src="{{ public_path('/storage/logos/logo.png') }}" width="100">
                         </td>
                     </tr>
 
+                    <!-- Title -->
+                    <tr>
+                        <td align="center" style="padding-top:8px;">
+                            <strong style="font-size:14px;">APPOINTMENT CONFIRMED</strong><br>
+                            <span style="font-size:11px;color:#6b7280;">Receipt</span>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding:10px 0;">
+                            <hr style="border:none;border-top:1px dashed #000;">
+                        </td>
+                    </tr>
+
+                    <!-- Customer -->
                     <tr>
                         <td>
-                            <h2 style="margin:0;color:#1f2937;">
-                                Appointment Confirmed
-                            </h2>
+                            <strong>{{ $booking->fname }} {{ $booking->lname }}</strong>
                         </td>
                     </tr>
 
-                    <tr>
-                        <td height="20"></td>
-                    </tr>
+                    <tr><td height="8"></td></tr>
 
-                    <tr>
-                        <td style="color:#6b7280;font-size:15px;">
-                            Hello <strong>{{ $booking->fname }} {{ $booking->lname }}</strong>,<br><br>
-                            Your appointment has been <strong>approved and confirmed</strong>.
-                            Please see your schedule details below.
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td height="30"></td>
-                    </tr>
-
+                    <!-- Details -->
                     <tr>
                         <td>
-
-                            <table width="100%" cellpadding="10" cellspacing="0"
-                                style="background:#f9fafb;border-radius:10px;font-size:14px;color:#374151;">
+                            <table width="100%" cellpadding="4" cellspacing="0">
 
                                 <tr>
-                                    <td align="left"><strong>Date</strong></td>
+                                    <td>Date</td>
                                     <td align="right">
-                                        {{ \Carbon\Carbon::parse($schedule->date)->format('F d, Y') }}
+                                        {{ \Carbon\Carbon::parse($schedule->date)->format('M d, Y') }}
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td align="left"><strong>Time</strong></td>
+                                    <td>Time</td>
                                     <td align="right">
-                                        {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} -
-                                        {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}
+                                        {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td align="left"><strong>Reason</strong></td>
+                                    <td>Reason</td>
                                     <td align="right">
                                         {{ $booking->booking_reason }}
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td align="left"><strong>Status</strong></td>
+                                    <td>Status</td>
                                     <td align="right">
-                                        <span
-                                            style="background:#16a34a;color:#ffffff;padding:4px 10px;border-radius:6px;font-size:12px;">
-                                            Approved
-                                        </span>
+                                        Approved
                                     </td>
                                 </tr>
 
                             </table>
-
                         </td>
                     </tr>
 
+                    <!-- Divider -->
                     <tr>
-                        <td height="30"></td>
-                    </tr>
-
-                    <tr>
-                        <td style="color:#6b7280;font-size:14px;">
-                            Please arrive at least <strong>10 minutes before your scheduled time</strong>.
+                        <td style="padding:10px 0;">
+                            <hr style="border:none;border-top:1px dashed #000;">
                         </td>
                     </tr>
 
+                    <!-- Notes -->
                     <tr>
-                        <td height="20"></td>
+                        <td style="font-size:11px;line-height:1.4;">
+                            Arrive 10 minutes early.<br>
+                            Contact clinic for changes.
+                        </td>
                     </tr>
 
+                    <!-- Footer -->
                     <tr>
-                        <td style="color:#9ca3af;font-size:12px;">
-                            If you need to reschedule or cancel your appointment, please contact the clinic.
+                        <td align="center" style="padding-top:10px;font-size:10px;color:#6b7280;">
+                            Thank you!
                         </td>
                     </tr>
 

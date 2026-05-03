@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import HomeLayout from "@/layouts/home-layout"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { useHandleChange } from "@/lib/use-handle-change"
-import { DailySchedule } from "@/types/models"
+import { DailySchedule, Booking } from "@/types/models"
 import { DayPicker } from "react-day-picker"
 import "react-day-picker/style.css";
 import axios from "axios"
 import { toast } from "sonner"
 import { usePage } from "@inertiajs/react"
 import InputError from "@/components/input-error"
-import confirmationDialog from "@/components/custom/confirmation-dialog"
 import ConfirmationDialog from "@/components/custom/confirmation-dialog"
+import ApprovedDialog from "./partials.tsx/approved-dialog"
+import { Spinner } from "@/components/ui/spinner"
 
 type DateItem = {
   date: string
@@ -25,18 +25,16 @@ export default function Home() {
   const nextStep = () => setStep((prev) => prev + 1)
   const prevStep = () => setStep((prev) => prev - 1)
   const [dialog, setDialog] = useState(false)
-
-  const { item, setItem, handleChange, setErrors, errors } = useHandleChange({ fname: "", lname: "", mname: "", email: "", code: "", reason: "", scheduleCode: "", })
+  const [confirmation, setConfirmation] = useState(false)
+  const [data, setData] = useState<{ booking: Booking; schedule: DailySchedule; } | null>(null);
+  const { item, setItem, handleChange, errors, setErrors } = useHandleChange({ fname: "", lname: "", mname: "", email: "", contact: "", reason: "", scheduleCode: "", })
   const canProceedStep1 = !!item.scheduleCode
   const canProceedStep2 =
     item.fname && item.lname && item.reason
-
-
   const [cooldown, setCooldown] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [loadingBtn, setLoadingBtn] = useState(true)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>()
   const [schedules, setSchedules] = useState<DailySchedule[]>([])
+  const [loading, setLoading] = useState(false)
 
   const allowedSet = useMemo(() => {
     return new Set(
@@ -69,47 +67,40 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [cooldown])
 
-  const sendVerification = () => {
-    if (!item.email) return
-    setLoading(true)
-    axios.post("/send-verification-code", {
-      email: item.email,
-    }).then((res) => {
-      setCooldown(res.data.cooldown)
-      toast.success(res.data.message)
-      setLoadingBtn(false)
-    }).catch((err) => {
-      console.log(err.response.data)
-      setErrors((prev) => ({ ...prev, email: err.response.data.message }))
-      toast.error(err.response.data.message)
-      setLoadingBtn(false)
-      if (err.response?.data?.cooldown) {
-        setCooldown(err.response.data.cooldown)
-      }
-      setLoading(false)
-    })
-  }
-
   const confirmAppointment = () => {
+    setConfirmation(false)
+    setLoading(true)
     const formData = new FormData()
     formData.append("fname", item.fname)
     formData.append("lname", item.lname)
     formData.append("mname", item.mname ?? "")
     formData.append("email", item.email)
-    formData.append("code", item.code)
+    formData.append("contact", item.contact)
     formData.append("reason", item.reason)
     formData.append("schedule_code", item.scheduleCode)
-    setLoadingBtn(true)
-    axios.post("/verify-code", formData).then((res) => {
-      setLoadingBtn(false)
+    axios.post("/submit-appointment", formData).then((res) => {
       toast.success(res.data.message)
-      setItem({ fname: "", lname: "", mname: "", email: "", code: "", reason: "", scheduleCode: "" })
+      setData({
+        booking: res.data.booking,
+        schedule: res.data.schedule,
+      });
+      setLoading(false)
+      setItem({ fname: "", lname: "", mname: "", email: "", contact: "", reason: "", scheduleCode: "" })
+      setDialog(true)
+      setStep(1)
+      setSchedules([])
     }).catch((err) => {
       toast.error(err.response.data.message)
-      setLoadingBtn(false)
-
-
+      if (err.response.data.errors)
+        setErrors(err.response.data.errors)
+      setLoading(false)
     })
+  }
+  const proceed = (item.contact === "" && item.email === "") || loading;
+
+  const downloadAppointment = () => {
+    
+    window.open(`/download-appointment/${data?.booking.schedule_code}`, "_blank");
   }
 
   return (
@@ -207,7 +198,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* ================== STEP 2 ================== */}
           {step === 2 && (
             <div className="space-y-8">
 
@@ -228,7 +218,7 @@ export default function Home() {
                   onChange={handleChange}
                 />
                 <Input
-                  name="middlename"
+                  name="mname"
                   placeholder="Middle Name"
                   value={item.mname ?? ""}
                   onChange={handleChange}
@@ -266,50 +256,33 @@ export default function Home() {
             </div>
           )}
 
-          {/* ================== STEP 3 ================== */}
           {step === 3 && (
             <div className="space-y-8">
 
               <div>
                 <h2 className="text-2xl font-semibold text-gray-800">
-                  Email Verification
+                  Contact Information
                 </h2>
-                <p className="text-gray-500">
-                  Verify your email to confirm booking.
-                </p>
               </div>
               <div className="grid gap-1">
                 <Input
                   type="email"
                   name="email"
-                  placeholder="Email Address"
+                  placeholder="Email Address (optional)"
                   value={item.email ?? ""}
                   onChange={handleChange}
                 />
                 <InputError message={errors.email} />
               </div>
-
-
-              <Button
-                disabled={cooldown > 0 || loading}
-                onClick={sendVerification}
-                className="bg-sky-700 hover:bg-sky-800 text-white"
-              >
-                {cooldown > 0
-                  ? `Resend in ${cooldown}s`
-                  : loading
-                    ? "Sending..."
-                    : "Send Verification Code"}
-              </Button>
-
               <Input
                 type="text"
-                name="code"
-                placeholder="Enter verification code"
-                value={item.code ?? ""}
+                name="contact"
+                placeholder="Contact No."
+                value={item.contact ?? ""}
                 onChange={handleChange}
-                maxLength={6}
+                maxLength={11}
               />
+              <InputError message={errors.contact} />
 
               <div className="flex justify-between">
                 <Button variant="outline" onClick={prevStep}>
@@ -317,17 +290,18 @@ export default function Home() {
                 </Button>
 
                 <Button
-                  onClick={confirmAppointment}
-                  disabled={loadingBtn}
+                  onClick={() => setConfirmation(true)}
+                  disabled={proceed}
                   className="bg-green-600 hover:bg-green-700 text-white"
                 >
-                  Confirm Appointment
+                  {loading && <Spinner className="mr-2" />} Confirm Appointment
                 </Button>
               </div>
             </div>
           )}
         </div>
-        <ConfirmationDialog show={dialog} onClose={()=>setDialog(false)} type={1} message="Appointment Successfully Created" />
+        <ApprovedDialog show={dialog} onClose={() => setDialog(false)} code={data?.booking.schedule_code ?? ""} onConfirm={downloadAppointment} />
+        <ConfirmationDialog show={confirmation} onConfirm={confirmAppointment} onClose={() => setConfirmation(false)} type={2} message="Are you sure you want to create an appointment?" />
       </div>
     </HomeLayout>
   )
