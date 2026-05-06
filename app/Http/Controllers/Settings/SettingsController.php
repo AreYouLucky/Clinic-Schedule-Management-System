@@ -37,7 +37,7 @@ class SettingsController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'Password successfully updated!'
+            'status' => 'Account successfully updated!'
         ]);
     }
 

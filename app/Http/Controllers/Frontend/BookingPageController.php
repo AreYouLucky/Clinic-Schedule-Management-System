@@ -81,6 +81,10 @@ class BookingPageController extends Controller
             'contact.required' => 'Contact number is required.',
             'contact.regex' => 'Invalid contact number.',
         ]);
+        $schedule = DailySchedule::where('schedule_code', $request->schedule_code)->first();
+        if(!$schedule || $schedule->is_available == 0 || $schedule->status == 0) {
+            return response()->json(['message' => 'Selected schedule is not available. Please choose another schedule.'], 422);
+         }
 
         $booking = Booking::create([
             'fname' => $request->fname,
@@ -92,7 +96,6 @@ class BookingPageController extends Controller
             'schedule_code' => $request->schedule_code,
             'status' => 0
         ]);
-        $schedule = DailySchedule::where('schedule_code', $request->schedule_code)->first();
         $schedule->update([
             'is_available' => 0
         ]);
