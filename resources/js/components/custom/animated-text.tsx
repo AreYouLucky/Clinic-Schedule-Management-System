@@ -196,7 +196,7 @@ export const TextEffect = ({
       <span
         ref={hiddenRef}
         className={cn(
-          "invisible whitespace-nowrap pointer-events-none",
+          "invisible whitespace-nowrap pointer-events-none text-[#78297c]",
           textClassName
         )}
       >
@@ -212,7 +212,7 @@ export const TextEffect = ({
           exit="exit"
           variants={currentAnimation }
           className={cn(
-            "absolute inset-0 flex items-center justify-center",
+            "absolute inset-0 flex items-center justify-center text-[#78297c]",
             textClassName
           )}
           style={{ transformOrigin: "center center" }}

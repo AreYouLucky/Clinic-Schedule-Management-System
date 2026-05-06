@@ -18,7 +18,7 @@ function ConfirmationDialog(props: ConfirmationDialogProp) {
                 <DialogHeader>
                     <DialogTitle >
                         <div className='text-9xl flex justify-center'>
-                            {props.type == 1 ? <FaInfoCircle className='text-blue-400'/> : <IoWarning className='text-sky-500' />}
+                            {props.type == 1 ? <FaInfoCircle className='text-[#78297c]'/> : <IoWarning className='text-[#10a89a]' />}
                         </div></DialogTitle>
                     <DialogDescription className="text-xs text-center">
                         <span className='sr-only'> Confirmation Dialog </span>
@@ -29,7 +29,7 @@ function ConfirmationDialog(props: ConfirmationDialogProp) {
                     {props.message}
                 </div>
                 <div className="w-full flex justify-center gap-2">
-                    {props.type == 2 && <Button className="text-gray-50 bg-sky-700 text-sm" onClick={props.onConfirm}>Proceed</Button>}
+                    {props.type == 2 && <Button className="bg-sky-700 text-sm text-gray-50" onClick={props.onConfirm}>Proceed</Button>}
                     <Button className="text-gray-50 bg-gray-700 text-sm" onClick={props.onClose}>Close</Button>
                 </div>
             </DialogContent>

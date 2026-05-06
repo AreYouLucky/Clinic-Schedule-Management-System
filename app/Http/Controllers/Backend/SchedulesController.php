@@ -152,8 +152,10 @@ class SchedulesController extends Controller
 
                 if ($scheduleFound->is_available !== 1 && $schedule['status'] == false) {
                     $booking = Booking::where('schedule_code', $schedule->schedule_code)->where('status', 0)->first();
+                    if ($booking && $booking->email) {
+                        Mail::to($booking->email)->send(new BookingCancellationRegret($booking, $scheduleFound));
+                    }
 
-                    Mail::to($booking->email)->send(new BookingCancellationRegret($booking, $scheduleFound));
                 }
 
                 $scheduleFound->update([

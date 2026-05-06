@@ -24,7 +24,7 @@ function ApprovedDialog({ code, show, onConfirm, message }: ApprovedDialogProp) 
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="bg-sky-600 text-white p-6 text-center">
+                <div className="bg-[#78297c] text-white p-6 text-center">
                     <div className="text-5xl flex justify-center mb-2">
                         <FaInfoCircle />
                     </div>
@@ -47,7 +47,7 @@ function ApprovedDialog({ code, show, onConfirm, message }: ApprovedDialogProp) 
                     </div>
                     <div className="flex justify-between mb-4">
                         <span className="text-gray-500">Status</span>
-                        <span className="text-green-600 font-semibold">
+                        <span className="text-[#10a89a] font-semibold">
                             Approved
                         </span>
                     </div>
@@ -59,7 +59,7 @@ function ApprovedDialog({ code, show, onConfirm, message }: ApprovedDialogProp) 
 
                 <div className="p-4 bg-gray-50 flex justify-center">
                     <Button
-                        className="w-full bg-sky-600 hover:bg-sky-700 text-white"
+                        className="w-full bg-[#78297c] hover:bg-[#5a1a5c] text-white"
                         onClick={onConfirm}
                     >
                         Download Receipt

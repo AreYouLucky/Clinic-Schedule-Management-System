@@ -57,7 +57,7 @@ function SchedulesPage() {
               <td className='text-center py-3'>
                 <div className='flex items-center justify-center gap-3'>
                   <Link href={`/schedules/${r.month_code}/edit`} className=' rounded-full'>
-                    <Pen className='w-4 h-4 text-green-500' />
+                    <Pen className='w-4 h-4 text-sky-500' />
                   </Link>
                   <button className='rounded-full'>
                     <Trash className='w-4 h-4 text-red-500' />

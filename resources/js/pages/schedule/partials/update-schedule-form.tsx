@@ -153,7 +153,7 @@ function UpdateScheduleForm() {
                 table: "w-full border-collapse",
                 head_cell: "text-gray-400 text-sm font-medium",
                 cell: "text-center p-1",
-                day: "h-10 w-10  hover:bg-blue-100   rounded-full transition",
+                day: "h-10 w-10 rounded-full transition hover:bg-sky-100",
                 selected: `bg-sky-500 text-white rounded-full`,
                 day_disabled: "text-gray-200 line-through",
               }}

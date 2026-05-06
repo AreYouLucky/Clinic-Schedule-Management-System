@@ -77,7 +77,7 @@ function AuthPage() {
                     <Label htmlFor="remember" className="text-gray-600">Show Password</Label>
                 </div>
 
-                <Button type="submit" className="mt-2 w-full bg-blue-400 text-white hover:bg-gray-600" disabled={loading} onClick={handleSubmit}>
+                <Button type="submit" className="mt-2 w-full bg-[#78297c] text-white hover:bg-[#5a1f5f]" disabled={loading} onClick={handleSubmit}>
                     {loading && <Spinner className="mr-2" />}
                     Log in
                 </Button>

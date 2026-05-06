@@ -121,7 +121,7 @@ export default function Home() {
 
   return (
     <HomeLayout>
-      <div className="max-w-7xl w-full mx-auto px-6 lg:px-12 md:py-12 py-6 bg-white  rounded-2xl p-8 my-6" id="BookNow">
+      <div className="max-w-7xl w-full mx-auto px-6 lg:px-12 md:py-12 py-6   rounded-2xl p-8 my-6" id="BookNow">
         <div className="lg:mb-6 mb-6 hidden md:flex items-center justify-center gap-6">
           <div className="flex justify-center">
             <div className="flex items-center  max-w-3xl justify-between">
@@ -133,15 +133,15 @@ export default function Home() {
                   <div key={index} className="flex items-center">
                     <div className="flex flex-col items-center text-center">
                       <div
-                        className={` h-10 w-10 flex items-center justify-center rounded-full text-sm font-semibold transition-all ${isCompleted ? "bg-green-600 text-white" : isActive ? "bg-sky-600 text-white" : "bg-gray-200 text-gray-600"}`}>
+                        className={` h-10 w-10 flex items-center justify-center rounded-full text-sm font-semibold transition-all ${isCompleted ? "bg-[#10a89a] text-white" : isActive ? "bg-[#78297c] text-white" : "bg-gray-200 text-gray-600"}`}>
                         {isCompleted ? "✓" : stepNumber}
                       </div>
-                      <span className={`mt-2 text-sm ${isActive ? "text-sky-600 font-medium" : "text-gray-500"}`} >
+                      <span className={`mt-2 text-sm ${isActive ? "text-[#78297c] font-medium" : "text-gray-500"}`} >
                         {label}
                       </span>
                     </div>
                     {stepNumber !== 3 && (
-                      <div className={` hidden sm:block h-0.5 w-24 mx-6 ${step > stepNumber ? "bg-green-500" : "bg-gray-200"}`} />
+                      <div className={` hidden sm:block h-0.5 w-24 mx-6 ${step > stepNumber ? "bg-[#10a89a]" : "bg-gray-200"}`} />
                     )}
                   </div>
                 )
@@ -184,9 +184,9 @@ export default function Home() {
                   />
                 </div>
                 <div className="flex-1 h-full">
-                  <div className="rounded-2xl border border-sky-100 bg-sky-50/60 p-4">
+                  <div className="rounded-2xl border border-[#ead7eb] bg-[#faf4fb] p-4">
                     <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-white p-2.5 text-sky-600 shadow-sm">
+                      <div className="rounded-xl bg-white p-2.5 text-[#78297c] shadow-sm">
                         <CalendarDays size={18} />
                       </div>
                       <div className="flex-1">
@@ -194,7 +194,7 @@ export default function Home() {
                           {selectedDate ? formattedSelectedDate : "Choose a date to view slots"}
                         </h3>
                         {selectedSchedule && (
-                          <p className="mt-1 text-xs font-medium text-sky-700">
+                          <p className="mt-1 text-xs font-medium text-[#78297c]">
                             Time: {selectedSchedule.start_time} - {selectedSchedule.end_time}
                           </p>
                         )}
@@ -213,7 +213,7 @@ export default function Home() {
                 <Button
                   disabled={!canProceedStep1}
                   onClick={nextStep}
-                  className="bg-sky-700 hover:bg-sky-800 text-white"
+                  className="bg-[#78297c] text-white hover:bg-[#5a1f5f]"
                 >
                   Continue
                 </Button>
@@ -271,7 +271,7 @@ export default function Home() {
                 <Button
                   disabled={!canProceedStep2}
                   onClick={nextStep}
-                  className="bg-sky-700 hover:bg-sky-800 text-white"
+                  className="bg-[#78297c] hover:bg-[#5a1f5f] text-white"
                 >
                   Continue
                 </Button>
@@ -315,7 +315,7 @@ export default function Home() {
                 <Button
                   onClick={() => setConfirmation(true)}
                   disabled={proceed}
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  className="bg-sky-600 hover:bg-sky-700 text-white"
                 >
                   {loading && <Spinner className="mr-2" />} Confirm Appointment
                 </Button>
@@ -326,7 +326,7 @@ export default function Home() {
         <Dialog open={showScheduleModal} onOpenChange={setShowScheduleModal}>
           <DialogContent className="sm:max-w-3xl max-h-[98vh] overflow-hidden">
             <DialogHeader>
-              <DialogTitle className="text-sky-700">Select a Time Slot</DialogTitle>
+              <DialogTitle className="text-[#78297c]">Select a Time Slot</DialogTitle>
               <DialogDescription className="text-slate-600">
                 {selectedDate
                   ? `Available appointment times for ${formattedSelectedDate}.`
@@ -340,8 +340,8 @@ export default function Home() {
                   className={`
                     border rounded-xl p-4 cursor-pointer transition flex items-center justify-center flex-row text-center text-sm
                     ${item.scheduleCode === slot.schedule_code
-                      ? "bg-sky-600 text-white border-sky-600 shadow-md"
-                      : "bg-white hover:bg-sky-200 border-sky-200 text-slate-700"}
+                      ? "bg-[#78297c] text-white border-[#78297c] shadow-md"
+                      : "border-[#ead7eb] bg-white text-slate-700 hover:bg-[#f4e8f5]"}
                   `}
                 >
                   {slot.start_time} - {slot.end_time}
