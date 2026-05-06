@@ -84,10 +84,9 @@ class AppointmentController extends Controller
         $schedule = DailySchedule::where('schedule_code', $booking->schedule_code)->first();
 
         if ($validated['status'] === 2) {
-            Mail::to($booking->email)->send(
-                new BookingCancellationSuccess($booking, $schedule)
-            );
-
+            if ($booking->email) {
+                Mail::to($booking->email)->send(new BookingCancellationSuccess($booking, $schedule));
+            }
             if ($schedule) {
                 $schedule->update([
                     'is_available' => 1
