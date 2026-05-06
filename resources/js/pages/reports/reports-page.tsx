@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { convertShortDate } from '@/lib/utils';
 import { useGetReports } from './hooks/hooks';
+import { formatMoney } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Reports', href: '/view-reports' },
@@ -135,7 +136,7 @@ function ReportsPage() {
                 </div>
                 <div className='rounded-xl border border-slate-200 bg-white p-4'>
                     <p className='text-xs text-sky-700 uppercase'>Paid Amount</p>
-                    <p className='text-2xl font-bold text-sky-700 mt-1'>PHP {summary.paidAmountTotal.toFixed(2)}</p>
+                    <p className='text-2xl font-bold text-sky-700 mt-1'>PHP {formatMoney(summary.paidAmountTotal)}</p>
                 </div>
                 <div className='rounded-xl border border-slate-200 bg-white p-4'>
                     <p className='text-xs text-rose-700 uppercase'>Cancelled</p>
@@ -179,7 +180,7 @@ function ReportsPage() {
                                 )}
                             </td>
                             <td className='text-center py-3 text-slate-700'>
-                                {r.paid_amount !== null && r.paid_amount !== undefined ? `PHP ${Number(r.paid_amount).toFixed(2)}` : '-'}
+                                {r.paid_amount !== null && r.paid_amount !== undefined ? `PHP ${formatMoney(r.paid_amount as number)}` : '-'}
                             </td>
                         </tr>
                     )}

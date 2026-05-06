@@ -13,6 +13,7 @@ import AppointmentHeader from './partials/header';
 import DataSection from './partials/data-section';
 import PaymentDialog from './partials/payment-dialog';
 import WalkinDialog from './partials/walkin-dialog';
+import { formatMoney } from '@/lib/utils';
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Appointments', href: '/view-appointments' },
 ];
@@ -209,7 +210,7 @@ function AppointmentsPage() {
                             </td>
                             <td className='py-4 text-center'>
                                 <span className='font-medium text-slate-700'>
-                                    {r.paid_amount !== null && r.paid_amount !== undefined ? `PHP ${Number(r.paid_amount).toFixed(2)}` : "-"}
+                                    {r.paid_amount !== null && r.paid_amount !== undefined ? `PHP ${formatMoney(r.paid_amount as number)}` : "-"}
                                 </span>
                             </td>
                             <td className='py-4 text-center'>

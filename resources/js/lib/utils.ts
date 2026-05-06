@@ -62,3 +62,15 @@ export function convertLongDate(date: Date | string | number): string {
   });
 }
 
+
+
+export const formatMoney = (value:number) => {
+  if (value === null || value === undefined || isNaN(value)) {
+    return "0.00";
+  }
+
+  return Number(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
