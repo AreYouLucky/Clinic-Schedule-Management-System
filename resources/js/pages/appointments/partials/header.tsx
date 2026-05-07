@@ -1,6 +1,6 @@
 
 import {  CreditCard, Users } from 'lucide-react';
-
+import { formatMoney } from '@/lib/utils';
 
 export default function AppointmentHeader({ no_schedules, total_paid }: { no_schedules: number, total_paid: number }) {
     return (
@@ -29,7 +29,7 @@ export default function AppointmentHeader({ no_schedules, total_paid }: { no_sch
                             <span className='text-xs uppercase tracking-[0.18em]'>Collected</span>
                             <CreditCard size={16} />
                         </div>
-                        <p className='mt-3 text-3xl font-semibold'>PHP {total_paid}</p>
+                        <p className='mt-3 text-3xl font-semibold'>PHP {formatMoney(total_paid)}</p>
                     </div>
                 </div>
             </div>
